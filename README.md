@@ -51,6 +51,13 @@ SuitAgent 是一个基于 **Claude Code 架构** 的诉讼法律服务智能分�
   - [9. Scheduler - 日程规划](#9-scheduler日程规划)
   - [10. Reviewer - 智能审查](#10-reviewer智能审查)
 - [安装指南](#-安装指南)
+  - [前提条件：安装Node.js](#前提条件安装nodejs)
+  - [第一步：安装Claude Code CLI](#第一步安装claude-code-cli)
+  - [第二步：下载并安装Zed编辑器](#第二步下载并安装zed编辑器推荐新手)
+  - [第三步：配置AI模型](#第三步配置ai模型)
+  - [第四步：配置API密钥](#第四步配置api密钥)
+  - [第五步：环境变量配置工具（可选）](#第五步环境变量配置工具可选)
+  - [第六步：验证安装](#第六步验证安装)
 - [快速开始](#-快速开始)
 - [常见使用场景](#-常见使用场景)
 - [文档管理](#-文档管理)
@@ -217,6 +224,37 @@ SuitAgent 采用**四层架构设计**，将10个Agent按职能分为4个层级�
 
 ## 🛠️ 安装指南
 
+### 前提条件：安装Node.js
+
+SuitAgent 基于 **Claude Code CLI** 运行，而Claude Code CLI需要Node.js环境。
+
+**方式一：使用Homebrew（推荐，macOS）**：
+```bash
+brew install node
+```
+
+**方式二：使用nvm（推荐，管理多版本）**：
+```bash
+# 安装nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# 重启终端，然后安装最新LTS版本
+nvm install --lts
+nvm use --lts
+nvm alias default --lts
+```
+
+**方式三：官网下载安装包**：
+- 访问 [Node.js官网](https://nodejs.org/)
+- 下载适合您操作系统的LTS版本（长期支持版）
+- 运行安装包，按提示完成安装
+
+**验证安装**：
+```bash
+node --version  # 应显示v18.x.x或更高版本
+npm --version   # 应显示9.x.x或更高版本
+```
+
 ### 第一步：安装Claude Code CLI
 
 SuitAgent 基于 **Claude Code CLI** 运行，这是终端中的AI助手。
@@ -261,10 +299,7 @@ nano .claude/settings.local.json
     "ANTHROPIC_AUTH_TOKEN": "",
     "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
     "ANTHROPIC_MODEL": "GLM-4.6",
-    "ANTHROPIC_SMALL_FAST_MODEL": "glm-4.5-air",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4.5-air",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4.6",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.6"
+    "ANTHROPIC_SMALL_FAST_MODEL": "GLM-4.6",
   }
 }
 ```
@@ -305,7 +340,36 @@ nano .claude/settings.local.json
 }
 ```
 
-### 第五步：验证安装
+### 第五步：环境变量配置工具（可选）
+如果需要频繁切换不同AI模型服务或API密钥，推荐使用 **cc-switch** 工具进行环境变量管理。
+
+#### 推荐安装方式：图形化应用（各平台）
+
+**macOS用户（推荐）**：
+```bash
+# 通过Homebrew安装图形化应用
+brew tap farion1231/ccswitch
+brew install --cask cc-switch
+```
+
+**Windows用户**：
+- 访问 [GitHub Releases](https://github.com/farion1231/cc-switch/releases)
+- 下载 `CC-Switch-v{版本号}-Windows.msi` 安装包
+- 运行安装程序完成安装
+- 或下载 `CC-Switch-v{版本号}-Windows-Portable.zip` 绿色版
+
+**Linux用户**：
+- 访问 [GitHub Releases](https://github.com/farion1231/cc-switch/releases)
+- 下载 `CC-Switch-v{版本号}-Linux.deb` 包
+- 运行 `sudo dpkg -i CC-Switch-v{版本号}-Linux.deb` 安装
+- 或下载 `CC-Switch-v{版本号}-Linux.AppImage` 安装包
+
+#### 备选安装方式：命令行工具（开发者）
+```bash
+npm install -g cc-switch
+```
+
+### 第六步：验证安装
 
 **运行测试命令**：
 ```bash
@@ -388,7 +452,6 @@ claude
 DocAnalyzer(分析新证据) + EvidenceAnalyzer(证据分析) → Researcher(针对性法条研究) → Writer(质证意见书) → Summarizer(证据摘要)
 ```
 
-**预计时间**：10-15分钟
 
 ### 场景3：庭审后分析
 **您只需说**：
@@ -401,7 +464,6 @@ DocAnalyzer(分析新证据) + EvidenceAnalyzer(证据分析) → Researcher(针
 DocAnalyzer(庭审笔录分析) → EvidenceAnalyzer(对比前后证据) → Strategist(调整策略) → Summarizer(庭审摘要) → Reporter(阶段报告)
 ```
 
-**预计时间**：12-18分钟
 
 ### 场景4：原告起诉（完整起诉流程）
 **您只需说**：
@@ -414,7 +476,6 @@ DocAnalyzer(庭审笔录分析) → EvidenceAnalyzer(对比前后证据) → Str
 DocAnalyzer(案件材料分析) → IssueIdentifier(识别争议焦点) → Researcher(法律检索) → EvidenceAnalyzer(证据分析) → Writer(起诉状) → Writer(证据目录) → Summarizer(案件摘要) → Reporter(整合完整起诉包)
 ```
 
-**预计时间**：20-25分钟
 
 ### 场景5：诉前咨询（出具服务方案）
 **您只需说**：
@@ -425,66 +486,7 @@ DocAnalyzer(案件材料分析) → IssueIdentifier(识别争议焦点) → Rese
 **系统自动执行**：
 ```
 DocAnalyzer(沟通记录分析) → IssueIdentifier(识别客户需求) → Strategist(制定服务方案) → Writer(法律服务方案书) → Summarizer(方案摘要)
-```
 
-**预计时间**：15-20分钟
-
-### 场景6：制作律师函（非诉催告）
-**您只需说**：
-- "发律师函"
-- "法律催告"
-- "律师警告"
-
-**系统自动执行**：
-```
-DocAnalyzer(事实情况分析) → Strategist(催告策略) → Writer(律师函) → Reporter(律师函材料)
-```
-
-**预计时间**：8-12分钟
-
-### 场景7：制作保全申请
-**您只需说**：
-- "申请财产保全"
-- "需要保全"
-- "防止转移财产"
-
-**系统自动执行**：
-```
-DocAnalyzer(保全需求分析) → Strategist(保全必要性评估) → Writer(保全申请书) → Writer(担保书) → Reporter(保全材料包)
-```
-
-### 场景8：制作上诉材料
-**您只需说**：
-- "不服判决"
-- "提起上诉"
-- "需要上诉状"
-
-**系统自动执行**：
-```
-DocAnalyzer(一审判决分析) → Researcher(二审法理研究) → Strategist(上诉策略) → Writer(上诉状) → Writer(上诉理由书) → Summarizer(上诉要点摘要) → Reporter(上诉材料包)
-```
-
-### 场景9：执行阶段
-**您只需说**：
-- "申请强制执行"
-- "判决不履行"
-- "需要执行"
-
-**系统自动执行**：
-```
-DocAnalyzer(执行依据分析) → Researcher(执行法律依据) → Writer(执行申请书) → Writer(财产线索清单) → Reporter(执行申请材料)
-```
-
-### 场景10：期限管理和工时统计
-**您只需说**：
-- "计算答辩期限"
-- "工时统计"
-- "期限提醒"
-
-**系统自动执行**：
-```
-Scheduler(期限计算) → Scheduler(时间线管理) → Scheduler(工时统计) → Scheduler(期限预警)
-```
 
 ## 📊 自动化工作流编排
 
@@ -505,50 +507,6 @@ SuitAgent 采用**智能工作流编排**技术，能够：
 | **判决书** | "判决"、"裁定"、"法院认为" | 判决分析 | DocAnalyzer → IssueIdentifier → Researcher |
 | **律师函** | "律师函"、"催告函" | 法律催告 | DocAnalyzer → Strategist → Writer |
 
-## 📁 文档管理
-
-### 标准化目录结构
-
-SuitAgent 采用标准化的案件文档管理结构，每个Agent的输出都会保存到专门的文件夹：
-
-```
-output/
-├── [案件编号]/              # 按案件编号分类
-│   ├── 01_案件分析/             # DocAnalyzer + Strategist
-│   ├── 02_法律研究/             # IssueIdentifier + Researcher
-│   ├── 03_证据材料/             # EvidenceAnalyzer
-│   ├── 04_法律文书/             # Writer
-│   ├── 05_综合报告/             # Summarizer + Reporter
-│   └── 06_日程管理/             # Scheduler
-│       ├── [案件编号].yaml       # 案件管理看板数据
-│       └── [案件编号].md         # 案件工作记录
-└── 模板库/                  # 通用文书模板
-```
-
-### 文档命名规范
-
-- **案件编号**：`[2025]京0105民初1234号`
-- **文档命名**：`[日期]_[文档类型]_[版本]`
-- **版本管理**：初稿 → 修订稿 → 最终稿
-
-### 🎯 双版本设计（Scheduler特有）
-
-Scheduler输出支持两种格式，满足不同需求：
-
-#### YAML版本 ([案件编号].yaml)
-- **用途**: 案件管理看板数据
-- **特点**: 结构化数据，支持仪表板展示、数据分析、图表生成
-- **适用场景**: 律所管理、案件统计、工时分析、风险监控
-
-#### MD版本 ([案件编号].md)
-- **用途**: 单个案件的工作记录
-- **特点**: 人类友好的阅读格式，详细的工作记录
-- **适用场景**: 律师日常查看、工作记录更新、客户汇报
-
-**双版本优势**:
-- ✅ 程序可读：YAML格式支持自动化数据处理
-- ✅ 人类可读：MD格式便于日常查看和编辑
-- ✅ 数据同步：两种格式信息互通，自动保持一致
 
 ## ❓ 常见问题（FAQ）
 
@@ -569,7 +527,41 @@ Scheduler输出支持两种格式，满足不同需求：
 - MiniMax（MiniMax-M2）- 推荐⭐⭐⭐⭐（免费使用）
 - DeepSeek（DeepSeek-V3.2）- 推荐⭐⭐⭐⭐
 
-详见[安装指南](#-安装指南)中的"第二步：配置AI模型"。
+详见[安装指南](#-安装指南)中的"第三步：配置AI模型"。
+
+### Q2: 如何快速切换不同AI模型？
+**A**: 推荐使用cc-switch工具：
+
+#### 方式一：图形化应用（推荐）
+
+**macOS用户**：
+```bash
+brew tap farion1231/ccswitch
+brew install --cask cc-switch
+```
+然后从启动台或应用程序文件夹中打开cc-switch。
+
+**Windows/Linux用户**：
+- 访问 [GitHub Releases](https://github.com/farion1231/cc-switch/releases)
+- 下载对应系统的安装包
+- 安装后运行cc-switch应用
+- 在应用中点击选择AI模型服务商即可
+
+#### 方式二：命令行工具（开发者）
+```bash
+npm install -g cc-switch
+
+# 快速切换模型
+cc-switch use zhipu   # 切换到智谱AI
+cc-switch use moonshot # 切换到月之暗面
+cc-switch use minimax # 切换到MiniMax
+cc-switch use deepseek # 切换到DeepSeek
+
+# 查看当前配置
+cc-switch current
+```
+
+详见[安装指南](#-安装指南)中的"第五步：环境变量配置工具（可选）"。
 
 ### Q3: 终端是什么？怎么打开？
 **A**: 终端是电脑中的命令行工具，操作简单就像发微信。
@@ -641,6 +633,23 @@ xdg-open output/[案件编号]/
 3. 批量执行分析工作流
 4. 生成独立的案件报告
 
+### Q9: 生成的文件保存在哪里？
+**A**: 文件按照标准化目录结构保存：
+
+**主要位置**：`output/[案件编号]/`
+
+**目录结构**：
+- `01_案件分析/` - 案件分析报告、策略方案
+- `02_法律研究/` - 争议焦点、法律研究报告
+- `03_证据材料/` - 证据目录、质证意见
+- `04_法律文书/` - 各类法律文书（起诉状、答辩状等）
+- `05_综合报告/` - 案件摘要、综合分析报告
+- `06_日程管理/` - 期限提醒、工时统计、时间线管理
+
+**快速查看**：
+- **使用Zed（推荐）**：在左侧文件树中展开`output/`目录
+- **使用终端**：运行 `open output/` (macOS) 或 `start output\` (Windows)
+
 ### Q10: 想要自定义工作流可以吗？
 **A**: 可以！高级用户可以：
 1. 修改 `.claude/agents/` 下的配置文件
@@ -648,42 +657,12 @@ xdg-open output/[案件编号]/
 3. 添加自定义的法律文书模板
 4. 调整输出格式和结构
 
-## 📂 项目结构
-
-```
-SuitAgent/
-├── .claude/              # Claude Code 核心配置
-│   ├── agents/           # 10个AI Subagent配置
-│   │   ├── DocAnalyzer.md      # 文档分析
-│   │   ├── EvidenceAnalyzer.md # 证据分析
-│   │   ├── IssueIdentifier.md  # 争议识别
-│   │   ├── Researcher.md       # 法律研究
-│   │   ├── Strategist.md       # 诉讼策略
-│   │   ├── Writer.md           # 法律文书
-│   │   ├── Summarizer.md       # 摘要生成
-│   │   ├── Reporter.md         # 案件报告
-│   │   ├── Scheduler.md        # 日程规划
-│   │   └── Reviewer.md         # 智能审查
-│   ├── memory/           # 法律文书模板知识库
-│   └── templates/        # 快速启动模板
-├── docs/                 # 项目文档
-│   ├── ROADMAP.md        # 项目路线图
-│   ├── DECISIONS.md      # 架构决策记录
-│   └── ARCHITECTURE.md   # 系统架构文档
-├── status/               # 项目状态文档
-│   ├── TASKS.md          # 任务清单
-│   ├── CHANGELOG.md      # 变更记录
-│   └── JOURNAL.md        # 工作日志
-├── input/                # 输入文档目录
-├── output/               # 输出报告目录
-│   └── cases/            # 案件输出文件夹
-└── CLAUDE.md             # AI代理协作协议
-```
 
 ## 🔗 实用工具链接
 
 ### 代码编辑器
 - **[Zed](https://zed.dev/)** - 推荐新手使用，内置终端，图形化操作
+- **[cc-switch项目主页](https://github.com/farion1231/cc-switch)** - 快速切换不同AI模型配置
 - **[Visual Studio Code](https://code.visualstudio.com/)** - 流行的代码编辑器
 
 ### AI模型平台
@@ -694,4 +673,4 @@ SuitAgent/
 
 ### 相关资源
 - **[Claude Code官方文档](https://docs.anthropic.com/claude-code)** - 了解Claude Code
-- **[Node.js官网](https://nodejs.org/)** - 如果需要安装npm
+- **[Node.js官网](https://nodejs.org/)** - 安装Node.js和npm
