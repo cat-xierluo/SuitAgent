@@ -4,7 +4,8 @@ import * as fs from 'fs';
 import { CaseScanner } from '../data/CaseScanner';
 import { MarkdownParser } from '../data/MarkdownParser';
 import { YamlParser } from '../data/YamlParser';
-import { CaseMeta, CaseInfo, ExtensionMessage, WebviewMessage } from '../data/types';
+import { ConfigReader } from '../data/ConfigReader';
+import { CaseMeta, CaseInfo, ExtensionMessage, WebviewMessage, WorkflowScenario, AgentConfig, RuleConfig } from '../data/types';
 
 /**
  * Manages the main Dashboard webview panel.
