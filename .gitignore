@@ -19,6 +19,13 @@ SuitAgent.code-workspace
 *.log
 
 
+# VSCode Extension build artifacts
+vscode-extension/dist/
+vscode-extension/node_modules/
+vscode-extension/out/
+vscode-extension/.vscode-test/
+vscode-extension/*.vsix
+
 # 依赖包
 node_modules/
 __pycache__/
