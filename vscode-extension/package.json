@@ -1,0 +1,110 @@
+{
+  "name": "suitagent-console",
+  "displayName": "SuitAgent Console",
+  "description": "SuitAgent 法律智能分析系统控制台 — 案件总览、工作流控制、配置管理",
+  "version": "0.1.0",
+  "publisher": "suitagent",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:suitagent-cases",
+    "onCommand:suitagent.openDashboard"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "suitagent-container",
+          "title": "SuitAgent",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "suitagent-container": [
+        {
+          "id": "suitagent-cases",
+          "name": "案件列表",
+          "icon": "resources/icon.svg"
+        },
+        {
+          "id": "suitagent-deadlines",
+          "name": "期限告警"
+        },
+        {
+          "id": "suitagent-actions",
+          "name": "快速操作"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "suitagent.openDashboard",
+        "title": "SuitAgent: 打开控制台"
+      },
+      {
+        "command": "suitagent.refreshCases",
+        "title": "SuitAgent: 刷新案件列表",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "suitagent.refreshCases",
+          "when": "view == suitagent-cases",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SuitAgent Console",
+      "properties": {
+        "suitagent.deadlineWarningDays": {
+          "type": "number",
+          "default": 7,
+          "description": "期限告警天数阈值"
+        },
+        "suitagent.autoRefreshInterval": {
+          "type": "number",
+          "default": 5000,
+          "description": "文件监控刷新间隔（毫秒）"
+        },
+        "suitagent.claudeCommandPath": {
+          "type": "string",
+          "default": "claude",
+          "description": "Claude Code CLI 路径"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "build:webview": "webpack --mode production --config webpack.webview.js",
+    "dev": "webpack --mode development"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "4.0.9",
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.0",
+    "css-loader": "^6.8.0",
+    "style-loader": "^3.3.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.3.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
