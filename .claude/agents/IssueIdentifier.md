@@ -50,42 +50,28 @@ color: yellow
 
 ## 📋 输出标准
 
-IssueIdentifier输出文件必须遵循以下规范：
-
 **文件格式**：结构化Markdown文档，包含争议焦点、法律关系分析等
 **文件命名**：`[日期前缀] 争议焦点分析.md`（如：`260101 争议焦点分析.md`）
 **输出位置**：`03 - 🔍 法律研究`
 
-> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](.claude/rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](.claude/rules/AgentMapping.md)
+> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](../rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](../rules/AgentMapping.md)
 
 ## 后续工作指引
 
-完成本Agent工作后，根据工作流需要调用后续Agent：
+完成本Agent工作后，根据当前场景的工作流定义调用后续Agent。
 
-### 🚨 后续Agent调用顺序
-
-1. **【继续调用】Researcher**
-   - 传递：争议焦点和法律关系分析
-   - 要求：针对争议焦点进行法律研究
-   - 路径：`03 - 🔍 法律研究`
-
-2. **【继续调用】Strategist**
-   - 传递：争议焦点分析结果
-   - 要求：基于争议焦点制定诉讼策略
-   - 路径：`02 - 📄 案件分析`
+> **工作流场景定义**：详见 [`.claude/rules/Workflow.md`](../rules/Workflow.md)
+>
+> 根据触发场景（被告应诉、证据质证、庭审后分析等）中定义的调用链，确定后续Agent。
 
 ### ⚠️ 重要提醒
 
-- **禁止手动中断** - 完成争议识别后必须调用后续Agent
-- **确保路径正确** - 文件保存在`output/[案件编号]/03 - 🔍 法律研究/`
+- **确保路径正确** - 文件保存在对应案件目录下
 - **检查文件格式** - 所有输出文件必须为.md格式
 
 ### 完成标识
 
-当所有后续Agent都被正确调用，标记：
+当本Agent工作完成，标记：
 
-```text
-✅ IssueIdentifier争议焦点识别完成
-✅ 争议焦点和法律关系已分析
-✅ 后续Agent已触发
-```
+✅ IssueIdentifier工作完成
+✅ 争议焦点和法律关系分析已生成

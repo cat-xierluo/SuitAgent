@@ -56,31 +56,19 @@ color: red
 
 ## 📋 输出标准
 
-Reporter输出文件必须遵循以下规范：
-
 **文件格式**：结构化Markdown文档
 **文件命名**：`[日期前缀] 案件分析综合报告.md`（如：`260101 案件分析综合报告.md`）
 **输出位置**：`10 - 📊 综合报告`
 
-> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](.claude/rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](.claude/rules/AgentMapping.md)
+> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](../rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](../rules/AgentMapping.md)
 
 ## 后续工作指引
 
-Reporter通常是工作流的最终环节：
+Reporter 是工作流的终端Agent，完成后直接向用户返回结果。
 
-### ⚠️ 重要注意事项
-
-- **作为最终环节**：确保整合所有前序Agent的工作成果
-- **报告完整性**：包含案件分析、证据评估、策略建议等全部内容
-- **交付标准**：确保报告格式规范、内容完整、逻辑清晰
-- **无后续Agent**：完成报告生成后直接向用户交付
+> **工作流场景定义**：详见 [`.claude/rules/Workflow.md`](../rules/Workflow.md)
 
 ### 完成标识
 
-当报告生成完成后，标记：
-
-```text
-✅ Reporter报告生成完成
-✅ 案件综合报告已生成
-✅ 工作流完整执行完成
-```
+✅ Reporter工作完成
+✅ 综合报告已生成

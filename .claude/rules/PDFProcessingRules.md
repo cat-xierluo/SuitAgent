@@ -1,57 +1,34 @@
 # PDF处理规范
 
-**版本**: v1.0
+**版本**: v1.1
 **适用Agent**: DocAnalyzer, EvidenceAnalyzer, 及其他需要处理PDF的Agent
 
 ## 处理优先级规则
 
 当处理PDF/图片文档时，必须按照以下优先级顺序进行：
 
-### 优先级1：MCP服务（首先尝试）
+### 优先级1：MinerU OCR Skill（首选方案）
 
-**检查MCP配置**：
-```bash
-# 简化的检查命令
-for dir in . .. ../.. ../../.. ../../../..; do
-    if [ -f "$dir/.claude/mcp.json" ]; then
-        if grep -q '"mineru"' "$dir/.claude/mcp.json" 2>/dev/null; then
-            echo "✅ 找到MinerU MCP配置"
-            mcp_configured=true
-            break
-        fi
-    fi
-done
-```
+**调用方式**：使用 `mineru-ocr` skill 处理文档
 
-**调用MCP工具**：
-```python
-mineru.parse_documents("/path/to/document.pdf")
-```
+**支持范围**：
+- 本地 PDF/图片文件
+- 远程文档 URL
+- 网页 URL
+
+**使用条件**：无需额外配置，开箱即用（默认使用免登录轻量接口）
+- 单文件限制：10 MB、最多 20 页（轻量模式）
+- 如需处理更大文件，可配置 MinerU Token 升级到标准 API
+
+**调用示例**：触发 `mineru-ocr` skill，传入文件路径或 URL
 
 **分支决策**：
-- ✅ **配置存在且调用成功** → 使用MCP返回结果
-- ❌ **配置不存在或调用失败** → 跳转到优先级2
+- ✅ **调用成功** → 使用返回的 Markdown 结果
+- ❌ **调用失败** → 跳转到优先级2
 
-### 优先级2：PDF技能（备用方案）
+### 优先级2：命令行工具（回退方案）
 
-**使用条件**：
-- MCP未配置
-- MCP配置不正确
-- MCP调用失败
-
-**处理流程**：
-```
-1. 声明回退：
-   "MinerU MCP不可用，将使用PDF技能进行OCR。"
-
-2. 调用pdf技能提取文档内容
-
-3. 接收识别结果
-```
-
-### 优先级3：命令行工具（最后回退）
-
-仅在PDF技能也失败时使用：
+仅在 MinerU skill 失败时使用：
 - tesseract（OCR）
 - pdftotext（PDF文本提取）
 
@@ -146,6 +123,7 @@ mineru.parse_documents("/path/to/document.pdf")
 
 | 版本 | 日期 | 更新内容 |
 |------|------|----------|
+| v1.1 | 2026-04-02 | 调整优先级：MinerU skill 为首选方案，MCP 降为备用 |
 | v1.0 | 2026-01-01 | 从DocAnalyzer.md提取，创建共享PDF处理规范 |
 
 ---

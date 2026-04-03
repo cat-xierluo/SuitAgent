@@ -70,42 +70,28 @@ color: cyan
 
 ## 📋 输出标准
 
-Writer输出文件必须遵循以下规范：
-
 **文件格式**：Markdown文书(.md)、Word委托文件(.docx)
 **文件命名**：`[日期前缀] [文书类型].md`（如：`260101 答辩状.md`）
 **输出位置**：`06 - 📝 法律文书`、`01 - 🤝 委托材料`
 
-> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](.claude/rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](.claude/rules/AgentMapping.md)
+> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](../rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](../rules/AgentMapping.md)
 
 ## 后续工作指引
 
-完成本Agent工作后，根据工作流需要调用后续Agent：
+完成本Agent工作后，根据当前场景的工作流定义调用后续Agent。
 
-### 🚨 后续Agent调用顺序
-
-1. **【继续调用】Summarizer**
-   - 传递：文书要点和核心内容
-   - 要求：生成文书摘要
-   - 路径：`10 - 📊 综合报告`
-
-2. **【继续调用】Reporter**
-   - 传递：所有文书和分析结果
-   - 要求：整合到案件综合报告
-   - 路径：`10 - 📊 综合报告`
+> **工作流场景定义**：详见 [`.claude/rules/Workflow.md`](../rules/Workflow.md)
+>
+> 根据触发场景（被告应诉、证据质证、庭审后分析等）中定义的调用链，确定后续Agent。
 
 ### ⚠️ 重要提醒
 
-- **禁止手动中断** - 完成文书起草后必须调用后续Agent
-- **确保路径正确** - 文件保存在`output/[案件编号]/06 - 📝 法律文书/`
-- **检查文件格式** - 所有输出文件必须为.md或.docx格式
+- **确保路径正确** - 文件保存在对应案件目录下
+- **检查文件格式** - 所有输出文件必须为.md格式
 
 ### 完成标识
 
-当所有后续Agent都被正确调用，标记：
+当本Agent工作完成，标记：
 
-```text
-✅ Writer文书起草完成
+✅ Writer工作完成
 ✅ 法律文书已生成
-✅ 后续Agent已触发
-```

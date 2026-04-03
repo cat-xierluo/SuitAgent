@@ -1,10 +1,3 @@
-# 律所专有模板（不纳入版本控制）
-.claude/templates/公司委托模板-剑桥颐华/
-.claude/templates/个人委托模板-剑桥颐华/
-
-# 通用案件模板（纳入版本控制，供SubAgent使用）
-!.claude/templates/case-templates/
-
 # 开发环境文件
 .DS_Store
 .vscode/
@@ -16,6 +9,7 @@
 
 # 开发工具生成的临时文件
 .specstory/
+.history/
 
 # VSCode 工作区配置文件（本地开发配置）
 *.code-workspace
@@ -23,15 +17,7 @@ SuitAgent.code-workspace
 
 # 日志文件
 *.log
-logs/
 
-# 临时文件
-tmp/
-.tmp/
-
-# 测试输出
-test-output/
-test-results/
 
 # 依赖包
 node_modules/
@@ -49,15 +35,26 @@ venv/
 docs/
 status/
 
-# 项目输出文件（保留output目录但忽略所有内容）
-output/*
+# 案件目录（格式：YYMM... 当事人 案由，必定包含中文，与其他纯英文目录区分）
+[0-9][0-9][0-9][0-9]*/
+
+# 输入输出目录（由 skill 运行时使用）
+input/
+output/
 
 # MCP 配置文件（包含 API 密钥）
 .claude/mcp.json
 .claude/mcp/*/config.json
 
-# 下载文件目录（保留文件夹但忽略内容）
-downloads/*
+# 用户偏好文件（个人偏好信息）
+.claude/preferences/
 
-# 归档目录（临时文档、实验性功能、过渡性内容）
-temp/
+# .claude 子目录中的 CLAUDE.md 文件（各组件本地配置）
+.claude/**/CLAUDE.md
+
+# 模板文件（律所专用模板）
+.claude/skills/md2word/assets/templates/剑桥颐华律所模板.docx
+
+# MinerU OCR 归档文件
+.claude/skills/mineru-ocr/archive/
+

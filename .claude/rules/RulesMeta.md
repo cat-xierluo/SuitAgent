@@ -22,16 +22,14 @@
 |------|---------|------|------|
 | **配置类** | `名词.md` | `AgentMapping.md`、`CaseTemplate.md` | 配置文件使用简洁名词 |
 | **规范类** | `XxxRules.md` 或 `XxxStandards.md` | `TimeRules.md`、`OutputStandards.md` | 规范文件使用 Rules 或 Standards 后缀 |
-| **工作流类** | `XxxWorkflow.md` | `DocAnalyzerWorkflow.md`、`WriterWorkflow.md` | Agent工作流使用 Workflow 后缀 |
-| **路由类** | `XxxRouting.md` | `AgentRouting.md`、`WorkflowRouting.md` | 路由配置使用 Routing 后缀 |
-| **场景类** | `XxxScenarios.md` | `WorkflowScenarios.md`、`CaseScenarios.md` | 场景定义使用 Scenarios 后缀 |
+| **工作流类** | `名词.md` | `Workflow.md` | 工作流配置使用简洁名词 |
 
 ### 正确示例
 
 ```bash
 AgentMapping.md          # ✅ 正确
 TimeRules.md             # ✅ 正确
-WorkflowSystem.md        # ✅ 正确
+Workflow.md              # ✅ 正确
 OutputStandards.md       # ✅ 正确
 DocAnalyzerWorkflow.md   # ✅ 正确
 ```

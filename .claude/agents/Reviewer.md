@@ -76,11 +76,11 @@ Reviewer作为支持层Agent，输出审查报告：
 **文件命名**：`[日期前缀] 质量审查报告.md`
 **输出位置**：直接返回给调用者，不单独存档
 
-> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](.claude/rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](.claude/rules/AgentMapping.md)
+> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](../rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](../rules/AgentMapping.md)
 
 ## 后续工作指引
 
-Reviewer作为支持层Agent，通常被其他Agent调用进行质量审查：
+Reviewer作为支持层Agent，通常被其他Agent调用进行质量审查，完成后直接返回结果。
 
 ### 触发机制
 
@@ -88,18 +88,9 @@ Reviewer作为支持层Agent，通常被其他Agent调用进行质量审查：
 2. **条件触发**：上诉状、代理词、质证意见书
 3. **手动调用**：用户要求时
 
-### ⚠️ 重要注意事项
-
-- **客观公正**：审查意见必须客观专业
-- **具体建议**：改进建议必须具体可操作
-- **质量把关**：确保法律文书质量达标
-
 ### 完成标识
 
-当质量审查完成后，标记：
+当质量审查完成，标记：
 
-```text
 ✅ Reviewer质量审查完成
 ✅ 质量评级和改进建议已生成
-✅ 审查报告已返回调用者
-```

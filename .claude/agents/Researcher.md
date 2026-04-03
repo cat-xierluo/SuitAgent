@@ -54,42 +54,28 @@ color: purple
 
 ## 📋 输出标准
 
-Researcher输出文件必须遵循以下规范：
-
 **文件格式**：结构化Markdown文档，包含法律研究报告、法条解读等
 **文件命名**：`[日期前缀] 法律研究报告.md`（如：`260101 法律研究报告.md`）
 **输出位置**：`03 - 🔍 法律研究`、`11 - 📚 参考文件`
 
-> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](.claude/rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](.claude/rules/AgentMapping.md)
+> **详细说明**：详见 [`.claude/rules/OutputStandards.md`](../rules/OutputStandards.md) 和 [`.claude/rules/AgentMapping.md`](../rules/AgentMapping.md)
 
 ## 后续工作指引
 
-完成本Agent工作后，根据工作流需要调用后续Agent：
+完成本Agent工作后，根据当前场景的工作流定义调用后续Agent。
 
-### 🚨 后续Agent调用顺序
-
-1. **【继续调用】Strategist**
-   - 传递：法律研究结果和适用路径
-   - 要求：基于法律分析制定诉讼策略
-   - 路径：`02 - 📄 案件分析`
-
-2. **【继续调用】Writer**
-   - 传递：法律依据和论证逻辑
-   - 要求：起草相关法律文书
-   - 路径：`06 - 📝 法律文书`
+> **工作流场景定义**：详见 [`.claude/rules/Workflow.md`](../rules/Workflow.md)
+>
+> 根据触发场景（被告应诉、证据质证、庭审后分析等）中定义的调用链，确定后续Agent。
 
 ### ⚠️ 重要提醒
 
-- **禁止手动中断** - 完成法律研究后必须调用后续Agent
-- **确保路径正确** - 文件保存在`output/[案件编号]/03 - 🔍 法律研究/`
+- **确保路径正确** - 文件保存在对应案件目录下
 - **检查文件格式** - 所有输出文件必须为.md格式
 
 ### 完成标识
 
-当所有后续Agent都被正确调用，标记：
+当本Agent工作完成，标记：
 
-```text
-✅ Researcher法律研究完成
-✅ 法条检索和判例研究已完成
-✅ 后续Agent已触发
-```
+✅ Researcher工作完成
+✅ 法条检索和判例研究已生成

@@ -22,7 +22,6 @@
 name: sub-agent-name
 description: 简洁描述何时调用此Subagent
 tools: Read, Bash, Write, Edit, Grep, Glob
-skills: pdf, docx
 color: blue
 ---
 ```
@@ -33,8 +32,7 @@ color: blue
 | :------------ | :--- | :----------------------------------------------------------- |
 | `name`        | ✅   | 唯一标识符，使用小写字母和连字符（如：`doc-analyzer`）       |
 | `description` | ✅   | 简洁的用途描述，用于主Agent自动路由决策                      |
-| `tools`       | ⚪   | 逗号分隔的工具列表（**不包含Skill，Skill是独立配置**）       |
-| `skills`      | ⚪   | 逗号分隔的技能列表，自动预加载（如：`pdf, docx`）            |
+| `tools`       | ⚪   | 逗号分隔的工具列表                                           |
 | `color`       | ⚪   | Agent显示颜色（可选）                                        |
 
 **⚠️ 注意事项**：
@@ -42,8 +40,7 @@ color: blue
 - name必须唯一且符合格式规范
 - description应具体且以行动为导向，便于自动路由
 - tools使用逗号分隔格式，不使用JSON数组
-- skills用于预加载技能，格式同tools
-- Skill是独立配置，不应包含在tools列表中
+- Skill由主Agent按需加载，不在Subagent配置中声明
 
 ### 1.2 Markdown内容（核心）
 
@@ -111,28 +108,22 @@ color: blue
 ```markdown
 ## 后续工作指引
 
-完成本Agent工作后，必须自动调用以下Agent：
+完成本Agent工作后，根据当前场景的工作流定义返回结果给主Agent。
 
-### 🚨 后续Agent调用顺序
-1. **【继续调用】[Agent1]**
-   - 传递：[传递内容]
-   - 要求：[具体要求]
-   - 路径：[输出路径]
+> **工作流场景定义**：详见 [`.claude/rules/Workflow.md`](../rules/Workflow.md)
+>
+> 主Agent根据触发场景中定义的调用链，编排后续Subagent调用。
 
 ### ⚠️ 重要提醒
-- [提醒事项1]
-- [提醒事项2]
+- **确保路径正确** - 文件保存在对应案件目录下
+- **检查文件格式** - 所有输出文件必须为.md格式
 
 ### 完成标识
-当所有后续Agent都被正确调用，标记：
-```
 
-✅ [Agent名称][工作内容]完成
-✅ [具体成果]
-✅ 后续Agent已触发
+当本Agent工作完成，标记：
 
-```
-
+✅ [Agent名称]工作完成
+✅ [具体成果]已生成
 ```
 
 ## 3. 官方最佳实践
@@ -150,8 +141,8 @@ color: blue
 
 ### 4.2 工作流集成
 
-- 明确定义与其他Agent的协作关系
-- 自动触发机制，确保工作流连贯
+- 工作流编排由主Agent统一管理
+- Subagent完成后返回结果，由主Agent决定后续调用
 
 ### 4.3 上下文继承
 
@@ -216,32 +207,22 @@ EvidenceAnalyzer输出文件必须遵循以下规范：
 
 ## 后续工作指引
 
-完成本Agent工作后，必须自动调用以下Agent：
+完成本Agent工作后，根据当前场景的工作流定义返回结果给主Agent。
 
-### 🚨 后续Agent调用顺序
-1. **【继续调用】Researcher**
-   - 传递：争议焦点和质证结果
-   - 要求：针对性法条检索
-   - 路径：`03 - 🔍 法律研究`
-
-2. **【继续调用】Writer**
-   - 传递：质证意见和证据分析
-   - 要求：起草质证意见书
-   - 路径：`06 - 📝 法律文书`
+> **工作流场景定义**：详见 [`.claude/rules/Workflow.md`](../rules/Workflow.md)
+>
+> 主Agent根据触发场景中定义的调用链，编排后续Subagent调用。
 
 ### ⚠️ 重要提醒
 - 证据分析必须基于三性原则（真实性、合法性、关联性）
 - 质证意见应客观专业，避免主观判断
 
 ### 完成标识
-当所有后续Agent都被正确调用，标记：
-```
+
+当本Agent工作完成，标记：
 
 ✅ EvidenceAnalyzer证据分析完成
 ✅ 证据三性质证完成
-✅ 后续Agent已触发
-
-```
 
 ```
 
@@ -266,7 +247,8 @@ EvidenceAnalyzer输出文件必须遵循以下规范：
 
 - [ ] 工作流程逻辑清晰
 - [ ] 输出标准引用正确（OutputStandards.md、AgentMapping.md）
-- [ ] 后续工作指引完整（明确下一个Agent调用）
+- [ ] 后续工作指引引用Workflow.md（不硬编码调用链）
+- [ ] 完成标识不包含"后续Agent已触发"（由主Agent编排）
 - [ ] 符合统一格式要求
 
 ### SuitAgent特色检查
