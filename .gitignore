@@ -56,8 +56,9 @@ output/
 # 用户偏好文件（个人偏好信息）
 .claude/preferences/
 
-# .claude 子目录中的 CLAUDE.md 文件（各组件本地配置）
-.claude/**/CLAUDE.md
+# 子目录中的 CLAUDE.md 文件（各组件本地配置），仅保留根目录的
+**/CLAUDE.md
+!CLAUDE.md
 
 # 模板文件（律所专用模板）
 .claude/skills/md2word/assets/templates/剑桥颐华律所模板.docx
