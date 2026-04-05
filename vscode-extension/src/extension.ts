@@ -96,6 +96,21 @@ export function activate(context: vscode.ExtensionContext) {
       const selectedCase = cases[0];
       claudeLauncher.launchPrompt(scenarioId, selectedCase.dirPath);
     }),
+
+    vscode.commands.registerCommand('suitagent.fixCaseStructure', () => {
+      const results = caseScanner.ensureAllCaseStructures();
+      if (results.size === 0) {
+        vscode.window.showInformationMessage('SuitAgent: 所有案件目录结构完整，无需修复');
+        return;
+      }
+      const totalCreated = Array.from(results.values()).reduce((s, v) => s + v.length, 0);
+      const caseNames = Array.from(results.keys()).map(k => `"${k}"`).join('、');
+      vscode.window.showInformationMessage(
+        `SuitAgent: 已修复 ${results.size} 个案件，共创建 ${totalCreated} 个目录（${caseNames}）`
+      );
+      caseTreeProvider.refresh();
+      DashboardPanel.refreshAll();
+    }),
   );
 
   // --- Configuration change listener ---

@@ -51,6 +51,11 @@
         "command": "suitagent.refreshCases",
         "title": "SuitAgent: 刷新案件列表",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "suitagent.fixCaseStructure",
+        "title": "SuitAgent: 修复案件目录结构",
+        "icon": "$(wrench)"
       }
     ],
     "menus": {

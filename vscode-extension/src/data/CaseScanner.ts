@@ -22,6 +22,49 @@ export class CaseScanner {
       .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
   }
 
+  /**
+   * Ensure a case directory has all 12 standard subdirectories.
+   * Creates any missing directories and returns a report of what was created.
+   */
+  ensureCaseStructure(dirName: string): string[] {
+    const dirPath = path.join(this.workspaceRoot, dirName);
+    const created: string[] = [];
+
+    for (const def of CASE_DIRS) {
+      const expectedName = `${def.index} - ${def.emoji} ${def.label}`;
+      const fullPath = path.join(dirPath, expectedName);
+
+      if (!fs.existsSync(fullPath)) {
+        try {
+          fs.mkdirSync(fullPath, { recursive: true });
+          created.push(expectedName);
+        } catch {
+          // Skip if cannot create (permissions, etc.)
+        }
+      }
+    }
+
+    return created;
+  }
+
+  /**
+   * Scan all cases and fix any missing directories.
+   * Returns a map of caseDirName → list of created directories.
+   */
+  ensureAllCaseStructures(): Map<string, string[]> {
+    const results = new Map<string, string[]>();
+    const entries = this.listCaseDirs();
+
+    for (const dirName of entries) {
+      const created = this.ensureCaseStructure(dirName);
+      if (created.length > 0) {
+        results.set(dirName, created);
+      }
+    }
+
+    return results;
+  }
+
   /** Check if a directory name looks like a case directory */
   static isCaseDir(dirName: string): boolean {
     // Match: 6 digits + space + description (e.g. "251112 张敏娟 亿驰能源 房租催缴")
