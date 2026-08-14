@@ -1,9 +1,94 @@
 # 变更记录
 
-> Last updated: 2026-04-02
+> Last updated: 2026-08-14
 > 所有对用户或其他协作者有影响的变更都会在此记录。使用 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/) 格式。
 
 ---
+
+## [v1.3.3] - 2026-08-14
+
+### 🔄 变更 (Changed)
+
+- **数据层 skill 更名 case-context → case-progress**（贴近律师语言"案件进度管理"；命名历程 case-store → case-context → case-progress，见决策 #046 第 4 条）：legal-skills 目录、符号链接（`.claude/skills/case-progress`）、方案文档（v1.5）、双 skill 交叉引用与里程碑归属标签全部同步。
+
+---
+
+## [v1.3.2] - 2026-08-14
+
+### ✨ 新增 (Added)
+
+- **legal-skills/skills/case-context**（v0.1.0 骨架）并经 skill-manager 符号链接安装到 `.claude/skills/case-context`：案件数据层 skill（case_store 写入引擎、v4.0 字典唯一权威、会话契约、/progress 命令、M6 监控挂点），与 new-case（创建）、case-dashboard（展示）构成案件生命周期接力。
+
+### 🔄 变更 (Changed)
+
+- **双 skill 切分（决策 #046，方案升 v1.4）**：M2/M3a/M3b/M4/M6 归 case-context，M1/M5 归 case-dashboard；case-dashboard 骨架瘦身（/progress 与 case_store.py/schema.md 职责移出），其 server 将以 subprocess 调 case-context CLI（禁跨 skill import）。
+- `scripts/skills.manifest` 追加 case-context 注释（符号链接管理，不入白名单）。
+- `status/TASKS.md` 各里程碑标注归属 skill。
+
+---
+
+## [v1.3.1] - 2026-08-14
+
+### 📖 文档 (Docs)
+
+- **`docs/case-dashboard与数据真值方案.md`（v1.3）**：case-dashboard 技能化 + 案件数据真值统一的设计真值文档——canonical case.yaml v4.0（基于现行 v3.0 中文模板演进，不回退 v2.1.0）、case_store 单一写入引擎（CLI + API 双面）、17 类字段混乱点处置表、自动写回三层防线（**hooks 部分延后为远期 M6**，近期以纯规则层 M3b 过渡）、CaseBoard 五项设计借鉴（含 PolyForm 许可红线：只借鉴设计、禁复制代码）。
+- **`docs/DECISIONS.md` 新增 #045**：记录分阶段实施决策（Phase 1 架构与数据治理先行，hooks 延后）。
+- **`status/TASKS.md`**：新增当前阶段"case-dashboard 与数据真值统一 · Phase 1"（M1–M4 待处理、M5/M6 规划中），原 Skills 同步架构升级阶段转入历史（init 已执行完毕）。
+
+---
+
+## [v1.3.0] - 2026-08-14
+
+### 🔄 变更 (Changed)
+
+- **🔗 Skills 同步架构升级：从本地符号链接改为 GitHub 远程仓库引用**
+  - 原 `.claude/skills/` 下 15 个指向本地绝对路径（含空格）的符号链接全部移除。
+  - 改为完整克隆 `https://github.com/cat-xierluo/legal-skills.git` 到 `.claude/skills-repo/`，再按 `scripts/skills.manifest` 白名单在 `.claude/skills/` 建立符号链接。
+  - 优势：不依赖本地绝对路径（跨机器 clone 后跑 `init` 即恢复）、远程新增 skill 一行命令拉取、可按白名单精确控制项目内的 skill 集合。
+
+### ✨ 新增 (Added)
+
+- **`scripts/sync-skills.sh`**：白名单驱动的 skills 同步脚本，子命令：
+  - `init` — 首次克隆远程仓库并按白名单建链
+  - `update` — 拉取远程最新并重新对齐
+  - `sync` — 仅对齐白名单与符号链接
+  - `add <name>` / `remove <name>` — 改白名单
+  - `status` — 显示仓库状态 + 白名单外的可用 skills
+- **`scripts/skills.manifest`**：当前项目在用的 15 个法律诉讼相关 skill 白名单（带分类注释）。
+- **`.claude/skills/README.md`**：说明同步机制，clone 后引导运行 `init`。
+
+### 🛠 内部 (Internal)
+
+- **`.gitignore`**：移除过时的 `.claude/skills/md2word/...` 与 `mineru-ocr/archive/` 规则；新增 `.claude/skills-repo/` 和 `.claude/skills/*` 排除（保留 README.md）。
+
+### ⚠️ 破坏性变更 (Breaking)
+
+- **仓库克隆后必须运行** `bash scripts/sync-skills.sh init` 才会出现 skills；否则 `.claude/skills/` 仅含 README.md。
+
+---
+
+## [v1.2.0] - 2026-08-14
+
+### ✨ 新增 (Added)
+
+- **🌐 本地 Dashboard 服务**：新增 `scripts/dashboard_server.py`（Python 标准库 `http.server.ThreadingHTTPServer` 单文件，零额外依赖），启动后浏览器打开 `http://127.0.0.1:7879` 聚合展示全部 8 个案件。
+  - 端点：`GET /` 返回改造后的 dashboard.html；`GET /api/{overview,cases,case/<id>,project}`、`POST /api/{task/toggle,open}`。
+  - 端口 7879（避开 content-registry 的 8765 和 idle-task-runner 的 7878）。
+- **🧩 异构数据源归一化适配层**：4 种案件数据源经适配器映射成统一 canonical 模型：
+  - 来源 A (yaml v2.1.0, 250519)：`tasks[]` 含 id/status/priority，**可写**
+  - 来源 B (yaml v3.0 中文, 251112)：里程碑 `状态` 哑 rand，**只读**
+  - 来源 C (yaml 自定义中文, 251229)：`工作进度`三列表，**只读**
+  - 来源 D (Markdown info.md, 251202/260127/260221)：`## 任务清单` checkbox，**可写**
+  - `none`（251231/260408） 仅目录，**只读**
+- **✏️ 任务状态可点击写回**：A 和 D 源任务支持浏览器点击在 `待办↔已完成` 间切换。
+  - 写回用 `fcntl.flock` 文件锁 + `truncate + write` 原子替换 + `os.fsync`（保留 inode、不丢注释、不重排格式）。
+  - 验证通过：toggle 后 0 字节差异、inode 保留、YAML 仍可解析、5 个并发请求全部成功。
+- **🎨 dashboard.html 改造**：保留原有深色霓虹看板设计语言（CSS 100% 保留），加入 vanilla JS fetch 逻辑、动态侧边 kanban、案件卡片网格、期限预警条、toast 提示、60 秒自动刷新。
+- **📖 启动说明**：`scripts/README_dashboard.md` 记录端口约定、API 列表、4 种数据源写回支持矩阵。
+
+### 🔧 优化 (Changed)
+
+- **📝 项目文档体系**：增加本地服务典型架构案例（参照 content-registry/idle-task-runner 范式），与 `docs/UI化开发方案_最终版.md` 的重量级 Node+SDK 路线作区隔。
 
 ## [v1.1.0] - 2026-04-02
 
