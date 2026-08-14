@@ -161,7 +161,7 @@ SuitAgent采用四层架构设计，将10个Agent按职能分为4个层级：
 
 - **优先读取**: `case_store show <案件短码>` 加载结构化状态 + 根目录 `案件信息.md` 获取案情叙事（契约见 [`DataRules.md`](./DataRules.md)）
 - **Agent输出**: 按照目录映射规范输出到对应目录
-- **状态同步**: 工作流收尾经 case-sync 将任务/期限/阶段变更写回 case.yaml；叙事情节重大节点更新案件信息.md
+- **状态同步**: 工作流收尾由主 Agent 执行 case-progress skill 的状态同步流程，将任务/期限/阶段变更写回 case.yaml；叙事情节重大节点更新案件信息.md
 
 ### 人工记录阶段
 

@@ -41,9 +41,9 @@ python3 .claude/skills/case-progress/scripts/case_store.py show <案件短码>
 3. `程序阶段锁定 = true`：不得改写程序阶段（可提示律师解锁）
 4. AI 写入的行一律 `source: ai`（CLI 自动落，不可伪装 user）
 
-## 🔄 工作流收尾（强制）
+## 🔄 工作流收尾（强制，skill 间协作）
 
-复合工作流（被告应诉、证据质证、庭审后分析、法律服务方案、策略优化、原告起诉、制作委托材料）在 Reporter 之后，主 Agent 必须派发 **case-sync** subagent 做案件状态同步（读本次产出、判断语义变更、经 CLI 写回）。工作流中的专业 Agent 不必各自写状态。
+复合工作流（被告应诉、证据质证、庭审后分析、法律服务方案、策略优化、原告起诉、制作委托材料）在 Reporter 之后，主 Agent **直接执行 case-progress skill 的"工作流收尾状态同步"流程**（加载状态 → 盘点产出 → 映射判断 → CLI 写回 → 校验汇报）——**不派发 subagent**（决策 #047：skill 协作为主）。工作流中的专业 Agent 不必各自写状态。
 
 ## 📁 文件分工速查
 

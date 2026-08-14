@@ -343,7 +343,7 @@
 
 **单一任务调用**：检测到单一功能触发词 → 立即路由到对应Agent → Agent完成任务 → 返回结果
 
-**复合任务调用**：检测到复合场景触发词 → 启动预设工作流 → 按顺序调用多Agent → Reporter整合结果 → case-sync案件状态同步 → 返回综合报告
+**复合任务调用**：检测到复合场景触发词 → 启动预设工作流 → 按顺序调用多Agent → Reporter整合结果 → 案件状态同步（case-progress skill 流程，主 Agent 直执行） → 返回综合报告
 
 ## 工作流执行原则
 
@@ -351,7 +351,7 @@
 2. **上下文继承**：主Agent将前序Subagent的结果传递给后续Subagent，保持分析一致性
 3. **增量更新**：复用历史分析结果，提高效率
 4. **质量保证**：每个Agent都具备内嵌验证或专项审查机制
-5. **收尾状态同步（强制）**：每个复合工作流（场景1–7 及未来新增）在 Reporter/收尾 Agent 完成后，主 Agent 必须派发 **case-sync** subagent 进行案件状态同步——读取本次产出文件，判断任务/期限/阶段的语义变更，经 case-progress 的 case_store CLI 写回 case.yaml（唯一真值）。读写契约详见 [`DataRules.md`](./DataRules.md)
+5. **收尾状态同步（强制）**：每个复合工作流（场景1–7 及未来新增）在 Reporter/收尾 Agent 完成后，主 Agent 直接执行 **case-progress skill 的"工作流收尾状态同步"流程**——读取本次产出文件，判断任务/期限/阶段的语义变更，经 case_store CLI 写回 case.yaml（唯一真值）。**不派发 subagent**（架构决策 #047：skill 间协作为主）。读写契约详见 [`DataRules.md`](./DataRules.md)
 
 ## 快速启动模板
 
@@ -381,7 +381,7 @@
 
 | 版本 | 日期 | 更新内容 |
 | :--- | :--- | :--- |
-| v2.1 | 2026-08-15 | 新增收尾状态同步强制原则（case-sync）：复合工作流 Reporter 后经 case_store CLI 写回案件状态（M3b，见 DataRules.md） |
+| v2.1 | 2026-08-15 | 新增收尾状态同步强制原则：复合工作流 Reporter 后经 case_store CLI 写回案件状态（M3b，见 DataRules.md）；同日按决策 #047 改为主 Agent 直执行 case-progress skill 流程，不派 subagent |
 | v2.0 | 2026-04-02 | 合并 WorkflowSystem.md 与 WorkflowScenarios.md，消除重复内容 |
 | v1.0 | 2026-01-01 | 迁移到Claude Code Rules架构，从YAML配置文件转换为Markdown格式 |
 

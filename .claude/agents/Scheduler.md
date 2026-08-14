@@ -50,7 +50,7 @@ color: blue
 2. **管理文件确认**：初始 case.yaml（v4.0）由 new-case 建档生成；存量案件经迁移后同理
 3. **期限初始化**：计算案件相关法定期限（起算日、天数、法律依据，考虑节假日）
 4. **期限落盘**：经 case-progress 的 case_store CLI `add-deadline` 写入 case.yaml（**禁止手改 yaml**，契约见 DataRules.md）
-5. **时间线与里程碑**：案件时间线事件经 CLI 或 case-sync 写入
+5. **时间线与里程碑**：案件时间线事件经 CLI 或状态同步流程（主 Agent 执行）写入
 6. **持续更新**：期限状态变化经 CLI 更新；不直接编辑 case.yaml
 
 ## 📋 输出标准
