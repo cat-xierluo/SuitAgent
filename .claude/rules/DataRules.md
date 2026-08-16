@@ -28,6 +28,7 @@ python3 .claude/skills/case-progress/scripts/case_store.py show <案件短码>
 | 推进任务 | `set-status <短码> <task_id> <todo\|in_progress\|done>` |
 | 登记期限 | `add-deadline <短码> <名称> --end <日期> [--start <日期>] [--days N] [--basis 条文]` |
 | 更新阶段 | `set-stage <短码> <阶段> [--lock]` |
+| **工时记录** | `log-work <短码> <时长小时> <内容> [--date] [--task task_id] [--file 文书路径] [--lawyer]`——"何时做了什么工作"的结构化真值（计费依据）；自动重算总工时 |
 | 校验 | `validate <短码>` |
 
 - 叙事情节（事实/争议论述/策略）**不进 yaml**，写 `案件信息.md`，仅重大节点（立案/开庭/判决/调解）
@@ -49,9 +50,9 @@ python3 .claude/skills/case-progress/scripts/case_store.py show <案件短码>
 
 | 文件 | 职责 | 写入方式 |
 | --- | --- | --- |
-| `00 - 📅 日程管理/case.yaml` | 状态真值（任务/期限/阶段/时间线/证据索引） | 仅经 case_store CLI（或看板） |
+| `00 - 📅 日程管理/case.yaml` | 状态真值（任务/期限/阶段/时间线/证据索引/**工作记录**） | 仅经 case_store CLI（或看板） |
 | `案件信息.md`（案件根，固定名） | 案情叙事（当事人细节/事实/争议论述/策略） | Agent 直接编辑，仅重大节点 |
-| `00 - 📅 日程管理/工时记录.md`（固定名） | 工时明细 | Agent/律师记录；聚合入 yaml 由 CLI 维护 |
+| `00 - 📅 日程管理/工时记录.md`（固定名） | **手工便签/打印件**（结构化真值在 case.yaml 工作记录） | 律师手写或导出打印 |
 | 02–11 目录 | 过程档案（分析/研究/证据/文书/报告） | 各工作流产出，不动 |
 
 ## 🔄 变更历史
