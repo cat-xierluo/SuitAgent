@@ -28,7 +28,7 @@ python3 .claude/skills/case-progress/scripts/case_store.py show <案件短码>
 | 推进任务 | `set-status <短码> <task_id> <todo\|in_progress\|done>` |
 | 登记期限 | `add-deadline <短码> <名称> --end <日期> [--start <日期>] [--days N] [--basis 条文]` |
 | 更新阶段 | `set-stage <短码> <阶段> [--lock]` |
-| **工时记录** | `log-work <短码> <时长小时> <内容> [--date] [--task task_id] [--file 文书路径] [--lawyer]`——"何时做了什么工作"的结构化真值（计费依据）；自动重算总工时 |
+| **工时记录** | `log-work <短码> <时长小时|?> <内容> [--date] [--task task_id] [--file 文书路径] [--lawyer]`——**AI 协作完成的工作在收尾时必记**（内容/产出文书/关联任务自动携带）；时长未知传 `?` 待律师补录，不得臆造；自动重算总工时 |
 | 校验 | `validate <短码>` |
 
 - 叙事情节（事实/争议论述/策略）**不进 yaml**，写 `案件信息.md`，仅重大节点（立案/开庭/判决/调解）
@@ -44,7 +44,9 @@ python3 .claude/skills/case-progress/scripts/case_store.py show <案件短码>
 
 ## 🔄 工作流收尾（强制，skill 间协作）
 
-复合工作流（被告应诉、证据质证、庭审后分析、法律服务方案、策略优化、原告起诉、制作委托材料）在 Reporter 之后，主 Agent **直接执行 case-progress skill 的"工作流收尾状态同步"流程**（加载状态 → 盘点产出 → 映射判断 → CLI 写回 → 校验汇报）——**不派发 subagent**（决策 #047：skill 协作为主）。工作流中的专业 Agent 不必各自写状态。
+复合工作流（被告应诉、证据质证、庭审后分析、法律服务方案、策略优化、原告起诉、制作委托材料）在 Reporter 之后，主 Agent **直接执行 case-progress skill 的"工作流收尾状态同步"流程**（加载状态 → 盘点产出 → 映射判断 → CLI 写回 → **log-work 工时记录（必做）** → 校验汇报）——**不派发 subagent**（决策 #047：skill 协作为主）。工作流中的专业 Agent 不必各自写状态。
+
+**AI 工作即留痕原则**：凡经 AI 协作完成的工作（文书、研究、证据整理、档案维护），收尾时必须留工作记录——"何时、做了什么、产出哪个文件"；时长未知记 `?` 待补。这是计费与复盘的依据。
 
 ## 📁 文件分工速查
 
